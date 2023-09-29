@@ -34,9 +34,7 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ABaseCharacter::Die()
 {
-	if (Health <= 0)
-	{
-		
-	}
+	//DetachFromControllerPendingDestroy();
+	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 

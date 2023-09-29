@@ -27,6 +27,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+
+	UPROPERTY(EditAnywhere)
+	float MaxHealth;
 	UPROPERTY(EditAnywhere)
 	float Health;
 	UPROPERTY(EditAnywhere)
