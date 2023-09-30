@@ -9,11 +9,20 @@
 /**
  * 
  */
+class AGun;
+
 UCLASS()
 class HORRORAUTOSHOOTER2_API APlayerCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-	
+
+public:
+	APlayerCharacter();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
 private:
 	UPROPERTY(VisibleAnywhere)
 	float Experience = 0.f;
@@ -26,4 +35,9 @@ private:
 	void ChooseBonus();
 	void LevelUp();
 
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AGun> GunClass;
+
+	UPROPERTY()
+	AGun* Gun;
 };

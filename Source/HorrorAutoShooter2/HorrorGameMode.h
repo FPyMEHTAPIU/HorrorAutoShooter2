@@ -3,17 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BaseCharacter.h"
-#include "Enemy.generated.h"
+#include "GameFramework/GameModeBase.h"
+#include "HorrorGameMode.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class HORRORAUTOSHOOTER2_API AEnemy : public ABaseCharacter
+class HORRORAUTOSHOOTER2_API AHorrorGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
-private:
-	float MaxHealth = 20.f;
 };

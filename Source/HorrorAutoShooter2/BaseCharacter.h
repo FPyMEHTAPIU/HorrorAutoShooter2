@@ -19,6 +19,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+	float Health;
+	UPROPERTY(EditDefaultsOnly)
+	float MaxHealth;
+	
+	UPROPERTY(EditAnywhere)
+	float MovementSpeed = 1.f;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -27,14 +35,16 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+  	class USpringArmComponent* SpringArm;
+  	UPROPERTY(VisibleAnywhere, Category = "Components")
+  	class UCameraComponent* Camera;
 
 	UPROPERTY(EditAnywhere)
-	float MaxHealth;
-	UPROPERTY(EditAnywhere)
-	float Health;
-	UPROPERTY(EditAnywhere)
-	float MovementSpeed;
+	float RotationRate = 50.f;
 
 	void Die();
 
+	void MoveForward(float AxisValue);
+	void MoveRight(float AxisValue);
 };
