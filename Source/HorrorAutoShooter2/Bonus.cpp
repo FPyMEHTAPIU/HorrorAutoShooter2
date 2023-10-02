@@ -11,12 +11,22 @@ ABonus::ABonus()
 
 }
 
+float ABonus::GetValue() const
+{
+	return Value;
+}
+
 // Called when the game starts or when spawned
 void ABonus::BeginPlay()
 {
 	Super::BeginPlay();
 	
 	SetLifeSpan(LifeTime);
+}
+
+void ABonus::SetValue(float NewValue)
+{
+	Value += NewValue;
 }
 
 // Called every frame

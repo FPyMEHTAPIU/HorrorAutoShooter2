@@ -4,7 +4,9 @@
 #include "Projectile.h"
 #include "Components/StaticMeshComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-
+#include "Kismet/GameplayStatics.h"
+#include "GameFramework/DamageType.h"
+#include "HealthComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -25,6 +27,7 @@ void AProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	ProjectileMesh->OnComponentHit.AddDynamic(this, &AProjectile::OnHit);
 }
 
 // Called every frame
@@ -32,5 +35,33 @@ void AProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+	FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("OnHit!"));
+	AActor* MyOwner = GetOwner();
+
+	if (MyOwner != nullptr)
+	{
+		Destroy();
+		return;
+	}
+
+	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *OtherActor->GetName());
+	UE_LOG(LogTemp, Warning, TEXT("OtherComp: %s"), *OtherComp->GetName());
+
+	AController* MyOwnInstigator = Cast<AController>(UGameplayStatics::GetPlayerController(this, 0));
+	UClass* DamageTypeClass = UDamageType::StaticClass();
+
+	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
+	{
+		// Here we Apply the Damage to the OtherActor
+		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnInstigator, this, DamageTypeClass);
+		//UE_LOG(LogTemp, Warning, TEXT("Health: %f"), OtherActor->Health);
+		// Add the Particles, Sound and Camera Shake effects
+	}
+	Destroy();
 }
 

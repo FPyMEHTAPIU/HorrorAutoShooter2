@@ -14,4 +14,9 @@ class HORRORAUTOSHOOTER2_API AHorrorGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void PawnKilled(APawn* PawnKilled);
+
+private:
+	void EndGame(bool bIsPlayerWinner);
 };

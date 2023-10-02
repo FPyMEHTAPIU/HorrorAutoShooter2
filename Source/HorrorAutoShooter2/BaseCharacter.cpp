@@ -4,6 +4,8 @@
 #include "BaseCharacter.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "HorrorGameMode.h"
+#include "Components/CapsuleComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -17,12 +19,38 @@ ABaseCharacter::ABaseCharacter()
 	Camera->SetupAttachment(SpringArm);
 }
 
+/*bool ABaseCharacter::IsDead() const
+{
+	return Health <= 0;
+}*/
+
+/*float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
+		class AController* EventInstigator, AActor* DamageCauser)
+{
+	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	DamageToApply = FMath::Min(Health, DamageToApply);
+	Health -= DamageToApply;
+	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+
+	if (IsDead())
+	{
+		AHorrorGameMode* GameMode = GetWorld()->GetAuthGameMode<AHorrorGameMode>();
+		if (GameMode != nullptr)
+		{
+			GameMode->PawnKilled(this);
+		}
+		DetachFromControllerPendingDestroy();
+		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	}
+	return DamageToApply;
+}*/
+
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Health = MaxHealth;
+	//Health = MaxHealth;
 }
 
 // Called every frame

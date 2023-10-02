@@ -25,6 +25,13 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	FTimerHandle ShootTimer;
+	UPROPERTY(EditAnywhere)
+	float Damage = 50.f;
+
+	UPROPERTY(EditAnywhere)
+	float FireRate = 1.f;
+
 private:
 
 	UPROPERTY(VisibleAnywhere)
@@ -38,13 +45,6 @@ private:
 	UParticleSystem* MuzzleFlash;
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* EmitterEffect;
-
-
-	UPROPERTY(EditAnywhere)
-	float Damage = 50.f;
-
-	UPROPERTY(EditAnywhere)
-	float FireRate = 20.f;
 
 	// Create a class for Projectile
 	UPROPERTY(EditDefaultsOnly)

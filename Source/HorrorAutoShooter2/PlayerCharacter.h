@@ -19,6 +19,9 @@ class HORRORAUTOSHOOTER2_API APlayerCharacter : public ABaseCharacter
 public:
 	APlayerCharacter();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,7 +33,7 @@ private:
 	float Level = 0.f;
 
 	template <class T>
-	T GrabBonus(T Bonus);
+	T TGrabBonus(T Bonus);
 
 	void ChooseBonus();
 	void LevelUp();
@@ -40,4 +43,6 @@ private:
 
 	UPROPERTY()
 	AGun* Gun;
+
+	APlayerController* SoldierPlayerController;
 };

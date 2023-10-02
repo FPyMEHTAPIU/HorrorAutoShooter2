@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Projectile.h"
+#include "Engine/TimerHandle.h"
 
 // Sets default values
 AGun::AGun()
@@ -37,13 +38,15 @@ void AGun::PullTrigger()
 void AGun::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	// Set the FireRate with the Timer
+	if (this)
+	{
+		GetWorld()->GetTimerManager().SetTimer(ShootTimer, this, &AGun::PullTrigger, FireRate, true);
+	}
 }
 
 // Called every frame
 void AGun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	PullTrigger();
 }
