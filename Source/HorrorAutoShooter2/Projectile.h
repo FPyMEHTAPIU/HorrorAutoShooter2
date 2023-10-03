@@ -31,7 +31,7 @@ private:
 	class UProjectileMovementComponent* ProjectileMovement;
 
 	UPROPERTY(EditAnywhere)
-	float Damage = 30.f;
+	float Damage = 20.f;
 
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 

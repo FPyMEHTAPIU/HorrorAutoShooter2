@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "HorrorGameMode.h"
 #include "Components/CapsuleComponent.h"
+//#include "HealthComponent.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -19,31 +20,10 @@ ABaseCharacter::ABaseCharacter()
 	Camera->SetupAttachment(SpringArm);
 }
 
-/*bool ABaseCharacter::IsDead() const
-{
-	return Health <= 0;
-}*/
-
-/*float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
-		class AController* EventInstigator, AActor* DamageCauser)
-{
-	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	DamageToApply = FMath::Min(Health, DamageToApply);
-	Health -= DamageToApply;
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
-
-	if (IsDead())
-	{
-		AHorrorGameMode* GameMode = GetWorld()->GetAuthGameMode<AHorrorGameMode>();
-		if (GameMode != nullptr)
-		{
-			GameMode->PawnKilled(this);
-		}
-		DetachFromControllerPendingDestroy();
-		GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	}
-	return DamageToApply;
-}*/
+// bool ABaseCharacter::IsDead() const
+// {
+// 	return GetHealth->Health <= 0;
+// }
 
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
@@ -70,8 +50,9 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ABaseCharacter::Die()
 {
-	//DetachFromControllerPendingDestroy();
-	//GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// bIsDead = true;
+	DetachFromControllerPendingDestroy();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void ABaseCharacter::MoveForward(float AxisValue)

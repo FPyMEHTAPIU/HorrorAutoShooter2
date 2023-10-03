@@ -13,7 +13,8 @@ UCLASS()
 class HORRORAUTOSHOOTER2_API AEnemy : public ABaseCharacter
 {
 	GENERATED_BODY()
-	
+public:
+	// Sets default values for this character's properties
+	AEnemy();
 private:
-	float MaxHealth = 20.f;
 };

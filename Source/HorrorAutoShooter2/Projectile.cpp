@@ -59,7 +59,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	{
 		// Here we Apply the Damage to the OtherActor
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnInstigator, this, DamageTypeClass);
-		//UE_LOG(LogTemp, Warning, TEXT("Health: %f"), OtherActor->Health);
+
 		// Add the Particles, Sound and Camera Shake effects
 	}
 	Destroy();

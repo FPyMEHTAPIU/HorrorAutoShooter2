@@ -15,20 +15,14 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
-	/*UFUNCTION(BlueprintPure)
-	bool IsDead() const;*/
+	void Die();
 
-	/*virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
-		class AController* EventInstigator, AActor* DamageCauser);*/
+	// UFUNCTION(BlueprintPure)
+	// bool IsDead() const;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	/*UPROPERTY(EditAnywhere)
-	float Health = 0.f;
-	UPROPERTY(EditDefaultsOnly)
-	float MaxHealth = 30.f;*/
 	
 	UPROPERTY(EditAnywhere)
 	float MovementSpeed = 1.f;
@@ -48,9 +42,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 50.f;
-
-	void Die();
-
+	
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+
+	//class UHealthComponent* HealthComponent;
 };

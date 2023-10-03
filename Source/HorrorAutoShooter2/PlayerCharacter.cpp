@@ -3,34 +3,26 @@
 
 #include "PlayerCharacter.h"
 #include "Gun.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
-
-
+    
+    // Set the default Player walkspeed
+    GetCharacterMovement()->MaxWalkSpeed = 400.f;
 }
 
 void APlayerCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    /*if (SoldierPlayerController)
-    {
-        FHitResult HitResult;
-        
-        SoldierPlayerController->GetHitResultUnderCursor(
-            ECollisionChannel::ECC_Visibility,
-            false,
-            HitResult);
-    }*/
 }
 
 void APlayerCharacter::BeginPlay()
 {
     Super::BeginPlay();
 
-    //Health = MaxHealth;
     // Set the Player's MoveSpeed
     APlayerCharacter::MovementSpeed = 500.f;
     // Spawn a gun with the PlayerCharacter
@@ -43,11 +35,6 @@ void APlayerCharacter::BeginPlay()
         Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
         Gun->SetOwner(this);
     }
-
-    /*if (this)
-    {
-        GetWorld()->GetTimerManager().SetTimer(ShootTimer, this, &AGun::PullTrigger, FireRate, true);
-    }*/
 }
 
 void APlayerCharacter::ChooseBonus()

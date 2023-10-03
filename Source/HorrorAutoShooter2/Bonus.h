@@ -32,7 +32,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float LifeTime = 20.f;
 
-	// Add StaticMesh
+	UPROPERTY(VisibleAnywhere)
+	UStaticMeshComponent* BonusMesh;
 };
 
 

@@ -2,6 +2,10 @@
 
 
 #include "HealthComponent.h"
+#include "HorrorGameMode.h"
+#include "Kismet/GameplayStatics.h"
+#include "Components/CapsuleComponent.h"
+#include "BaseCharacter.h"
 
 // Sets default values for this component's properties
 UHealthComponent::UHealthComponent()
@@ -21,6 +25,8 @@ void UHealthComponent::BeginPlay()
 
 	Health = MaxHealth;
 	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken);
+
+	HorrorGameMode = Cast<AHorrorGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 
@@ -39,4 +45,12 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 	Damage = FMath::Min(Health, Damage);
 	Health -= Damage;
 	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+
+	// logic if character is dead
+	if (Health <= 0.f)
+	{
+		ABaseCharacter* DeadChar = Cast<ABaseCharacter>(DamagedActor);
+		DeadChar->Die();
+	}
+
 }
