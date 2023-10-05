@@ -46,11 +46,13 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	if (MyOwner != nullptr)
 	{
 		Destroy();
+		UE_LOG(LogTemp, Warning, TEXT("MyOwner: %s"), *MyOwner->GetName());
 		return;
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *OtherActor->GetName());
 	UE_LOG(LogTemp, Warning, TEXT("OtherComp: %s"), *OtherComp->GetName());
+	//UE_LOG(LogTemp, Warning, TEXT("MyOwner: %s"), *MyOwner->GetName());
 
 	AController* MyOwnInstigator = Cast<AController>(UGameplayStatics::GetPlayerController(this, 0));
 	UClass* DamageTypeClass = UDamageType::StaticClass();

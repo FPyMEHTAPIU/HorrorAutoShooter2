@@ -17,8 +17,10 @@ public:
 
 	void Die();
 
-	// UFUNCTION(BlueprintPure)
-	// bool IsDead() const;
+	UFUNCTION(BlueprintPure)
+	bool IsDead() const;
+	UFUNCTION(BlueprintPure)
+	float GetHealth() const;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,6 +37,10 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 private:
+	UPROPERTY(EditAnywhere)
+	float MaxHealth = 100.f;
+	float Health = 0.f;
+
 	UPROPERTY(VisibleAnywhere, Category = "Components")
   	class USpringArmComponent* SpringArm;
   	UPROPERTY(VisibleAnywhere, Category = "Components")
@@ -45,6 +51,11 @@ private:
 	
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
+
+	//UFUNCTION()
+	//void DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, AController* MyOwnInstigator, AActor* DamageCauser);
+
+	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	//class UHealthComponent* HealthComponent;
 };

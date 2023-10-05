@@ -24,9 +24,9 @@ void UHealthComponent::BeginPlay()
 	Super::BeginPlay();
 
 	Health = MaxHealth;
-	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken);
+	//GetOwner()->OnTakeAnyDamage.AddDynamic(this, &UHealthComponent::DamageTaken);
 
-	HorrorGameMode = Cast<AHorrorGameMode>(UGameplayStatics::GetGameMode(this));
+	//HorrorGameMode = Cast<AHorrorGameMode>(UGameplayStatics::GetGameMode(this));
 }
 
 
@@ -38,7 +38,12 @@ void UHealthComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, 
+float UHealthComponent::GetHealth() const
+{
+	return Health;
+}
+
+/*void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, 
 	AController* Instigator, AActor* DamageCauser)
 {
 	if (Damage <= 0.f) return;
@@ -53,4 +58,4 @@ void UHealthComponent::DamageTaken(AActor* DamagedActor, float Damage, const UDa
 		DeadChar->Die();
 	}
 
-}
+}*/
