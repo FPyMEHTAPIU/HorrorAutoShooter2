@@ -2,6 +2,8 @@
 
 
 #include "PlayerCharacter.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Gun.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -9,6 +11,20 @@ APlayerCharacter::APlayerCharacter()
 {
     PrimaryActorTick.bCanEverTick = true;
     
+    SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
+	SpringArm->SetupAttachment(RootComponent);	
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+    GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FQuat(FRotator(0.0f, -90.0f, 0.0f)));    
+	Camera->SetupAttachment(SpringArm);
+
+    /*
+    //Setting class variables of the spring arm
+    //SpringArm->bUsePawnControlRotation = true;
+    //Setting class variables of the Character movement component
+    GetCharacterMovement()->bOrientRotationToMovement = true;
+    GetCharacterMovement()->bUseControllerDesiredRotation = true;
+    GetCharacterMovement()->bIgnoreBaseRotation = true;*/
+
     // Set the default Player walkspeed
     GetCharacterMovement()->MaxWalkSpeed = 400.f;
 }
@@ -16,7 +32,13 @@ APlayerCharacter::APlayerCharacter()
 void APlayerCharacter::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
+    
+    //GetCharacterMovement()->bOrientRotationToMovement = true;
+    // Destroy the Gun object, when player has died
+    if (this->GetHealth() <= 0.f)
+    {
+        Gun->Destroy();
+    }
 }
 
 void APlayerCharacter::BeginPlay()
@@ -62,7 +84,7 @@ void APlayerCharacter::ChooseBonus()
 void APlayerCharacter::LevelUp()
 {
     Level++;
-    Experience -= 1000;
+    Experience -= 100;
 }
 
 // A function must works with the different types of Bonuses (e.g. Heal, Experience, FireRate, MovementSpeed of something another)

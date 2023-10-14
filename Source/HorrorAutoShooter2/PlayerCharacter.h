@@ -27,6 +27,11 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+  	class USpringArmComponent* SpringArm;
+  	UPROPERTY(VisibleAnywhere, Category = "Components")
+  	class UCameraComponent* Camera;
+
 	UPROPERTY(VisibleAnywhere)
 	float Experience = 0.f;
 	UPROPERTY(VisibleAnywhere)

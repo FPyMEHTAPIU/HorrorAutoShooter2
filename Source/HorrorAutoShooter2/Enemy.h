@@ -16,6 +16,56 @@ class HORRORAUTOSHOOTER2_API AEnemy : public ABaseCharacter
 public:
 	// Sets default values for this character's properties
 	AEnemy();
-private:
 	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION()
+	void Attack();
+
+	//~AEnemy();
+
+	/*// called when something enters the sphere component
+	UFUNCTION()
+	void OnOverlapBegin(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	// called when something leaves the sphere component
+	UFUNCTION()
+	void OnOverlapEnd(class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);*/
+	
+	// UFUNCTION()
+	// void DamageOnOverlap(AActor* OverlappedActor, AActor* OtherActor);
+	
+	UFUNCTION()
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+	FVector NormalImpulse, const FHitResult& Hit);
+
+	UFUNCTION(BlueprintPure)
+	bool IsHit();
+
+	UFUNCTION()
+	void SetbHit(bool NewHit);
+
+	UPROPERTY(VisibleAnywhere)
+	bool bHit = false;
+
+	FTimerHandle AttackTimer;
+
+	UFUNCTION(BlueprintPure)
+	bool InAttackRange();
+
+protected:
+
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+private:
+
+	UPROPERTY(EditAnywhere)
+	float AttackDamage = 40.f;
+
+	class UCapsuleComponent* EnemyCapsule;
+	UStaticMeshComponent* EnemyMesh;
+	
+	UPROPERTY(EditAnywhere)
+	float AttackDelay = 1.f;
 };

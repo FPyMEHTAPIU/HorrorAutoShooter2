@@ -2,10 +2,9 @@
 
 
 #include "BaseCharacter.h"
-#include "GameFramework/SpringArmComponent.h"
-#include "Camera/CameraComponent.h"
 #include "HorrorGameMode.h"
 #include "Components/CapsuleComponent.h"
+#include "Bonus.h"
 //#include "HealthComponent.h"
 
 // Sets default values
@@ -13,11 +12,6 @@ ABaseCharacter::ABaseCharacter()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
-	SpringArm->SetupAttachment(RootComponent);	
-	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(SpringArm);
 
 	//HealthComponent = CreateDefaultSubobject<UHealthComponent>(TEXT("Health Component"));
 }
@@ -38,13 +32,18 @@ float ABaseCharacter::GetHealth() const
 	return Health;
 }
 
+// void ABaseCharacter::SetHealth(float GetDamage)
+// {
+// 	Healh -= Damage;
+// }
+
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 	Health = MaxHealth;
-	//	GetOwner()->OnTakeAnyDamage.AddDynamic(this, &ABaseCharacter::DamageTaken);
+	//GetOwner()->OnTakeAnyDamage.AddDynamic(this, &ABaseCharacter::TakeDamage);
 }
 
 // Called every frame
@@ -67,22 +66,41 @@ void ABaseCharacter::Die()
 	// bIsDead = true;
 	DetachFromControllerPendingDestroy();
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+
+	/*ABaseCharacter* BaseCharPawn = Cast<ABaseCharacter>(GetOwner());
+	TSubclassOf<ABonus> BonusObject = ABonus::StaticClass();
+    GetWorld()->SpawnActor<ABonus>(BonusObject, BaseCharPawn->GetActorLocation(), BaseCharPawn->GetActorRotation());*/
+		
 }
 
 void ABaseCharacter::MoveForward(float AxisValue)
 {
-	AddMovementInput(GetActorForwardVector() * AxisValue * RotationRate * GetWorld()->GetDeltaSeconds() * MovementSpeed);
+	// Find out which way is forward
+    const FRotator Rotation = Controller->GetControlRotation();
+    const FRotator YawRotation(0, Rotation.Yaw, 0);
+	// Get forward vector
+    const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
+    AddMovementInput(Direction, AxisValue);
+	//AddMovementInput(GetActorForwardVector() * AxisValue * RotationRate * GetWorld()->GetDeltaSeconds() * MovementSpeed);
 }
 
 void ABaseCharacter::MoveRight(float AxisValue)
 {
-	AddMovementInput(GetActorRightVector() * AxisValue * RotationRate * GetWorld()->GetDeltaSeconds() * MovementSpeed);
+	// Find out which way is right
+    const FRotator Rotation = Controller->GetControlRotation();
+    const FRotator YawRotation(0, Rotation.Yaw, 0);
+	// Get right vector 
+    const FVector Direction = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
+	// Add movement in that direction
+    AddMovementInput(Direction, AxisValue);
+	//AddMovementInput(GetActorRightVector() * AxisValue * RotationRate * GetWorld()->GetDeltaSeconds() * MovementSpeed);
 }
 
 float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
 	class AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	
 	DamageToApply = FMath::Min(Health, DamageToApply);
 	Health -= DamageToApply;
 	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
@@ -90,6 +108,7 @@ float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 	if (IsDead())
 	{
 		Die();
+		SetLifeSpan(5.f);
 	}
 
 	return DamageToApply;

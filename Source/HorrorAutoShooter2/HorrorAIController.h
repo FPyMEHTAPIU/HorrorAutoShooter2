@@ -19,11 +19,15 @@ protected:
 public:
 	virtual void Tick(float DeltaSeconds) override;
 	//bool IsDead() const;
+	UFUNCTION(BlueprintPure)
+	bool InAttackRange();
 
 private:
 	UPROPERTY(EditAnywhere)
 	class UBehaviorTree* AIBehavior;
 
 	UPROPERTY(EditAnywhere)
-	float AcceptanceRadius = 30.f;
+	float AcceptanceRadius = 0.f;
+
+	//class AEnemy* EnemyPawn;
 };

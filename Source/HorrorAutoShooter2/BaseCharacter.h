@@ -21,6 +21,10 @@ public:
 	bool IsDead() const;
 	UFUNCTION(BlueprintPure)
 	float GetHealth() const;
+	//void SetHealth(float GetDamage);
+
+	UPROPERTY(EditAnywhere)
+	float RotationRate = 50.f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -41,13 +45,7 @@ private:
 	float MaxHealth = 100.f;
 	float Health = 0.f;
 
-	UPROPERTY(VisibleAnywhere, Category = "Components")
-  	class USpringArmComponent* SpringArm;
-  	UPROPERTY(VisibleAnywhere, Category = "Components")
-  	class UCameraComponent* Camera;
-
-	UPROPERTY(EditAnywhere)
-	float RotationRate = 50.f;
+	
 	
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
