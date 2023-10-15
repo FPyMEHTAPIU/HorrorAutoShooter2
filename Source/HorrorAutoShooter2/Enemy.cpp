@@ -108,7 +108,6 @@ void AEnemy::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveC
 
 	if (OtherActor && OtherActor != this && !OtherActor->IsA(AEnemy::StaticClass()) && bHit)
 	{   
-                                        // HOW TO FUCKING DELAY THIS DAMN ATTACK!!!
         // Here we Apply the Damage to the OtherActor
 		UGameplayStatics::ApplyDamage(OtherActor, AttackDamage, EnemyController, this, DamageTypeClass);
 		// Add the Particles, Sound and Camera Shake effects
