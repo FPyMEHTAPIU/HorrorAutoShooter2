@@ -14,7 +14,7 @@ APlayerCharacter::APlayerCharacter()
     SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	SpringArm->SetupAttachment(RootComponent);	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-    GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FQuat(FRotator(0.0f, -90.0f, 0.0f)));    
+    //GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FQuat(FRotator(0.0f, -90.0f, 0.0f)));    
 	Camera->SetupAttachment(SpringArm);
 
     /*
@@ -57,6 +57,8 @@ void APlayerCharacter::BeginPlay()
         Gun->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("WeaponSocket"));
         Gun->SetOwner(this);
     }
+
+    //GetOwner()->OnTakeAnyDamage.AddDynamic(this, &APlayerCharacter::TakeDamage);
 }
 
 void APlayerCharacter::ChooseBonus()
