@@ -9,6 +9,7 @@
 /**
  * 
  */
+
 UCLASS()
 class HORRORAUTOSHOOTER2_API AEnemy : public ABaseCharacter
 {
@@ -36,9 +37,9 @@ public:
 	// UFUNCTION()
 	// void DamageOnOverlap(AActor* OverlappedActor, AActor* OtherActor);
 	
-	UFUNCTION()
-	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
-	FVector NormalImpulse, const FHitResult& Hit);
+	// UFUNCTION()
+	// void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
+	// FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION(BlueprintPure)
 	bool IsHit();
@@ -61,14 +62,22 @@ public:
 	UFUNCTION(BlueprintPure)
 	bool InAttackRange();
 
+	void Die() override;
+
+	UFUNCTION(BlueprintPure)
+	float GetAttackRange() const;
+
 protected:
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 private:
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	float AttackDamage = 40.f;
+
+	UPROPERTY(EditAnywhere)
+	float AttackRange = 150.f;
 
 	class UCapsuleComponent* EnemyCapsule;
 	UStaticMeshComponent* EnemyMesh;
@@ -83,4 +92,12 @@ private:
 
 	UPROPERTY(EditAnywhere)
     TSubclassOf<USphereComponent> SphereClass;
+
+	// meta for edit private member in blueprints
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* HealthBar;
+
+	void BonusDrop();
+
+	
 };

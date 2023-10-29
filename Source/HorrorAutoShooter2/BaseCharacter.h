@@ -15,13 +15,18 @@ public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
 
-	void Die();
+	virtual void Die();
 
 	UFUNCTION(BlueprintPure)
 	bool IsDead() const;
 	UFUNCTION(BlueprintPure)
 	float GetHealth() const;
 	//void SetHealth(float GetDamage);
+	UFUNCTION(BlueprintPure)
+	float GetMaxHealth() const;
+
+	UFUNCTION(BlueprintCallable)
+	void SetHealth(float HealValue);
 
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 50.f;
@@ -31,7 +36,7 @@ protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditAnywhere)
-	float MovementSpeed = 1.f;
+	float MovementSpeed = 20.f;
 
 public:	
 	// Called every frame
@@ -43,7 +48,7 @@ public:
 private:
 	UPROPERTY(EditAnywhere)
 	float MaxHealth = 100.f;
-	float Health = 0.f;
+	float Health = 10.f;
 
 	
 	
@@ -56,4 +61,14 @@ private:
 	virtual float TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, class AController* EventInstigator, AActor* DamageCauser) override;
 
 	//class UHealthComponent* HealthComponent;
+
+	FVector2D PreviousMousePosition;
+	FVector2D CurrentMousePosition;
+
+	float CalculateMouseSpeed();
+
+	UInputComponent* MyInputComponent;
+
+	UPROPERTY(EditAnywhere)
+	float SpeedMultiplier = 5.f;
 };

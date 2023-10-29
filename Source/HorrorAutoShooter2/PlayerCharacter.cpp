@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Gun.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Components/WidgetComponent.h"
 
 APlayerCharacter::APlayerCharacter()
 {
@@ -17,6 +18,8 @@ APlayerCharacter::APlayerCharacter()
     //GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -90.0f), FQuat(FRotator(0.0f, -90.0f, 0.0f)));    
 	Camera->SetupAttachment(SpringArm);
 
+    PlayerHUD = CreateDefaultSubobject<UWidgetComponent>(TEXT("PlayerHUD"));
+    PlayerHUD->SetupAttachment(RootComponent);
     /*
     //Setting class variables of the spring arm
     //SpringArm->bUsePawnControlRotation = true;
@@ -39,6 +42,25 @@ void APlayerCharacter::Tick(float DeltaTime)
     {
         Gun->Destroy();
     }
+}
+
+void APlayerCharacter::SetExperience(float ExpValue)
+{
+    Experience += ExpValue;
+    if (Experience >= 100)
+    {
+        LevelUp();
+    }
+}
+
+float APlayerCharacter::GetExperience()
+{
+    return Experience;
+}
+
+int32 APlayerCharacter::GetLvl()
+{
+    return Level;
 }
 
 void APlayerCharacter::BeginPlay()

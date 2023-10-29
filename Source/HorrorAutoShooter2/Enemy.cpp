@@ -9,6 +9,8 @@
 #include "Bonus.h"
 #include "Engine/TimerHandle.h"
 #include "Components/SphereComponent.h"
+#include "Components/WidgetComponent.h"
+#include "HorrorGameMode.h"
 
 
 AEnemy::AEnemy()
@@ -20,8 +22,10 @@ AEnemy::AEnemy()
         AttackCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("MeleeSocket"));
     }
 
-    // Set the default Enemy walkspeed
-    GetCharacterMovement()->MaxWalkSpeed = 200.f;
+    
+
+    HealthBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
+    HealthBar->SetupAttachment(RootComponent);
 }
 
 void AEnemy::Tick(float DeltaTime)
@@ -39,60 +43,58 @@ void AEnemy::Tick(float DeltaTime)
     }
 }
 
-/*AEnemy::~AEnemy()
-{
-    AEnemy* EnemyPawn = Cast<AEnemy>(GetOwner());
-    // Drag it to the Die() function, because in the destructor it will be too late
-    TSubclassOf<ABonus> BonusObject = ABonus::StaticClass();
-    GetWorld()->SpawnActor<ABonus>(BonusObject, EnemyPawn->GetActorLocation(), EnemyPawn->GetActorRotation());
-}*/
-
 void AEnemy::BeginPlay()
 {
     Super::BeginPlay();
 
-    //AttackCollision = GetWorld()->SpawnActor<USphereComponent>(SphereClass);
-   
-
-    // Here we set the function, which will be called when the enemy colides with the character
-    // GetCapsuleComponent()->OnComponentHit.AddDynamic(this, &AEnemy::OnHit);
     if (AttackCollision != nullptr)
-    {
+    {   
+        // Here we set the function, which will be called when the enemy colides with the character
         AttackCollision->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
-    }
-    // Timer delegate needs to call the timer function with input parameters
-    
+    }    
+    // Set the default Enemy walkspeed
+    GetCharacterMovement()->MaxWalkSpeed = MovementSpeed;
+}
+
+void AEnemy::BonusDrop()
+{
+    // Spawn Bonus when Enemy dies
+    TSubclassOf<ABonus> BonusObject = ABonus::StaticClass(); 
+    GetWorld()->SpawnActor<ABonus>(BonusObject, GetActorLocation(), GetActorRotation());
 }
 
 void AEnemy::Attack()
 {
+    // Timer delegate needs to call the timer function with input parameters
     FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &AEnemy::SetbHit, true);
     GetWorld()->GetTimerManager().SetTimer(AttackTimer, TimerDelegate, AttackDelay, true);
-
-    // return FMath::Min(this->GetHealth(), AttackDamage);
 }
 
+// Overlap function (called, when enemy collides with other actor)
 void AEnemy::OnOverlapBegin(class UPrimitiveComponent* Comp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
     if (OtherActor && (OtherActor != this) && OtherComp)
     {
-        UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *OtherActor->GetName());
-	    UE_LOG(LogTemp, Warning, TEXT("OtherComp: %s"), *OtherComp->GetName());
+        // UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *OtherActor->GetName());
+	    // UE_LOG(LogTemp, Warning, TEXT("OtherComp: %s"), *OtherComp->GetName());
         AController* EnemyController = GetController();
+        ABaseCharacter* PlayerChar = Cast<ABaseCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
         UClass* DamageTypeClass = UDamageType::StaticClass();
-        AttackDamage = FMath::Min(this->GetHealth(), AttackDamage);
+        
+        AttackDamage = FMath::Min(PlayerChar->GetHealth(), AttackDamage);
+
         // Here we prevent the self-damage, frendly-damage, check the hit event and damage delay
         if (OtherActor && OtherActor != this && !OtherActor->IsA(AEnemy::StaticClass()) && bHit && bDamageDeal)
         {
-            UE_LOG(LogTemp, Error, TEXT("YOU CAN DEAL DAMAGE!"));
+            // UE_LOG(LogTemp, Error, TEXT("YOU CAN DEAL DAMAGE!"));
             // Here is the timer that delays the damage applying to the player
             FTimerDelegate TimerDelegate = FTimerDelegate::CreateUObject(this, &AEnemy::SetDealDamageDelay, true);
             GetWorld()->GetTimerManager().SetTimer(DamageTimer, TimerDelegate, DamageDelay, true);
 
             UGameplayStatics::ApplyDamage(OtherActor, AttackDamage, EnemyController, this, DamageTypeClass);
             SetDealDamageDelay(false);
-        }
-        
+        }  
     }
 }
 
@@ -159,11 +161,32 @@ void AEnemy::SetDealDamageDelay(bool bWaitAttack)
 bool AEnemy::InAttackRange()
 {
     APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
-    //AEnemy* EnemyPawn = Cast<AEnemy>(GetPawn());
     FVector EnemyLocation = this->GetActorLocation(); 
     FVector PlayerLocation = PlayerPawn->GetActorLocation();
+
     // Get the distance between the enemy and the player
     float DistanceToPlayer = FVector::Distance(PlayerLocation, EnemyLocation);
 
-    return DistanceToPlayer <= 150.f;
+    return DistanceToPlayer <= AttackRange;
+}
+
+void AEnemy::Die()
+{
+    DetachFromControllerPendingDestroy();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    
+    // We hide the enemy's health bar before it disappears
+    HealthBar->SetHiddenInGame(true);
+    AHorrorGameMode* GameMode = GetWorld()->GetAuthGameMode<AHorrorGameMode>();
+	if (GameMode != nullptr)
+		{
+			GameMode->SetEnemyKilledScore();
+		}
+    // Here we have an experience drop
+    // BonusDrop();
+}
+
+float AEnemy::GetAttackRange() const
+{
+    return AttackRange;
 }

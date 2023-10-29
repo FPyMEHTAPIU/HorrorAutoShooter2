@@ -17,6 +17,16 @@ void AHorrorGameMode::PawnKilled(APawn* PawnKilled)
     EndGame(true);
 }
 
+void AHorrorGameMode::SetEnemyKilledScore()
+{
+    EnemyKilledScore++;
+}
+
+float AHorrorGameMode::GetEnemyKilledScore()
+{
+    return EnemyKilledScore;
+}
+
 void AHorrorGameMode::EndGame(bool bIsPlayerWinner)
 {
     for (AController* Controller : TActorRange<AController>(GetWorld()))

@@ -26,12 +26,22 @@ AGun::AGun()
 
 void AGun::PullTrigger()
 {
+	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, Mesh, TEXT("MuzzleFlashSocket"));
+	UGameplayStatics::SpawnSoundAttached(ShootSound, Mesh, TEXT("MuzzleFlashSocket"));
+
 	GetWorld()->SpawnActor<AProjectile>(
 		ProjectileClass, 
 		ProjectileSpawnPoint->GetComponentLocation(), 
 		ProjectileSpawnPoint->GetComponentRotation()
 		);
 	
+}
+
+void AGun::SetFireRate(float FireRateDecreasePercent)
+{
+	FireRate *= ((100 - FireRateDecreasePercent) / 100);
+	GetWorldTimerManager().ClearTimer(ShootTimer);
+	GetWorldTimerManager().SetTimer(ShootTimer, this, &AGun::PullTrigger, FireRate, true);
 }
 
 // Called when the game starts or when spawned

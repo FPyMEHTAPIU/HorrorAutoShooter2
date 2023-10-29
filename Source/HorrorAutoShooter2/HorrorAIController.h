@@ -9,6 +9,8 @@
 /**
  * 
  */
+class UUserWidget;
+
 UCLASS()
 class HORRORAUTOSHOOTER2_API AHorrorAIController : public AAIController
 {
@@ -28,6 +30,11 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float AcceptanceRadius = 0.f;
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> HUDClass;
+
+	UUserWidget* HUD;
 
 	//class AEnemy* EnemyPawn;
 };

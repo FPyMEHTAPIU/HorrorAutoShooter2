@@ -12,6 +12,7 @@ class HORRORAUTOSHOOTER2_API ABonus : public AActor
 	GENERATED_BODY()
 	
 public:	
+	UFUNCTION(BlueprintPure)
 	float GetValue() const;
 
 protected:
@@ -30,7 +31,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	float Value = 0.f;
 	UPROPERTY(EditAnywhere)
-	float LifeTime = 20.f;
+	float LifeTime = 30.f;
 
 	UPROPERTY(VisibleAnywhere)
 	UStaticMeshComponent* BonusMesh;

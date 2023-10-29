@@ -22,6 +22,15 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION(BlueprintCallable)
+	void SetExperience(float ExpValue);
+
+	UFUNCTION(BlueprintPure)
+	float GetExperience();
+
+	UFUNCTION(BlueprintPure)
+	int32 GetLvl();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -35,7 +44,7 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	float Experience = 0.f;
 	UPROPERTY(VisibleAnywhere)
-	float Level = 0.f;
+	int32 Level = 1;
 
 	template <class T>
 	T TGrabBonus(T Bonus);
@@ -50,4 +59,8 @@ private:
 	AGun* Gun;
 
 	APlayerController* SoldierPlayerController;
+
+	// meta for edit private member in blueprints
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	class UWidgetComponent* PlayerHUD;
 };

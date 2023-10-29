@@ -15,6 +15,15 @@ public:
 	// Sets default values for this actor's properties
 	AProjectile();
 
+	UFUNCTION(BlueprintCallable)
+	void SetDamage(float NewDamage);
+
+	UFUNCTION(BlueprintPure)
+	float GetDamage() const;
+
+	UFUNCTION(BlueprintCallable)
+	void IncreaseDamage(float IncreaseDamage);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,5 +46,8 @@ private:
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 	FVector NormalImpulse, const FHitResult& Hit);
 	
-
+	UPROPERTY(EditAnywhere)
+	UParticleSystem* HitEffect;
+	UPROPERTY(EditAnywhere)
+	USoundBase* HitSound;
 };

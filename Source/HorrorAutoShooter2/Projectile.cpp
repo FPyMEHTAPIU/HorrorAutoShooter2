@@ -22,6 +22,21 @@ AProjectile::AProjectile()
 	ProjectileMovement->InitialSpeed = 2000.f;
 }
 
+void AProjectile::SetDamage(float NewDamage)
+{
+	Damage = NewDamage;
+}
+
+float AProjectile::GetDamage() const
+{
+	return Damage;
+}
+
+void AProjectile::IncreaseDamage(float IncreaseDamage)
+{
+	Damage += IncreaseDamage;
+}
+
 // Called when the game starts or when spawned
 void AProjectile::BeginPlay()
 {
@@ -40,18 +55,19 @@ void AProjectile::Tick(float DeltaTime)
 void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 	FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("OnHit!"));
+	//UE_LOG(LogTemp, Warning, TEXT("OnHit!"));
 	AActor* MyOwner = GetOwner();
 
 	if (MyOwner != nullptr)
 	{
 		Destroy();
-		UE_LOG(LogTemp, Warning, TEXT("MyOwner: %s"), *MyOwner->GetName());
+		// UE_LOG(LogTemp, Warning, TEXT("MyOwner: %s"), *MyOwner->GetName());
 		return;
 	}
-
-	UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *OtherActor->GetName());
-	UE_LOG(LogTemp, Warning, TEXT("OtherComp: %s"), *OtherComp->GetName());
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, Hit.Location, GetActorRotation());
+	UGameplayStatics::PlaySoundAtLocation(GetWorld(), HitSound, Hit.Location, 0.25f);
+	// UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s"), *OtherActor->GetName()); uncom this
+	// UE_LOG(LogTemp, Warning, TEXT("OtherComp: %s"), *OtherComp->GetName()); uncom this
 	//UE_LOG(LogTemp, Warning, TEXT("MyOwner: %s"), *MyOwner->GetName());
 
 	AController* MyOwnInstigator = Cast<AController>(UGameplayStatics::GetPlayerController(this, 0));
@@ -60,6 +76,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 	if (OtherActor && OtherActor != this && OtherActor != MyOwner)
 	{
 		// Here we Apply the Damage to the OtherActor
+		// UE_LOG(LogTemp, Error, TEXT("Damage Deal: %f"), Damage);
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnInstigator, this, DamageTypeClass);
 
 		// Add the Particles, Sound and Camera Shake effects

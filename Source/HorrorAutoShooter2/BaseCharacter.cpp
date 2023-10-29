@@ -5,6 +5,7 @@
 #include "HorrorGameMode.h"
 #include "Components/CapsuleComponent.h"
 #include "Bonus.h"
+#include "GameFramework/PlayerInput.h"
 //#include "HealthComponent.h"
 
 // Sets default values
@@ -32,6 +33,16 @@ float ABaseCharacter::GetHealth() const
 	return Health;
 }
 
+float ABaseCharacter::GetMaxHealth() const
+{
+	return MaxHealth;
+}
+
+void ABaseCharacter::SetHealth(float HealValue)
+{
+	Health += HealValue;
+}
+
 // void ABaseCharacter::SetHealth(float GetDamage)
 // {
 // 	Healh -= Damage;
@@ -50,13 +61,21 @@ void ABaseCharacter::BeginPlay()
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	
+	// MyInputComponent = InputComponent;
 
+	/*if (MyInputComponent)
+	{
+		PreviousMousePosition = CurrentMousePosition;
+    	CurrentMousePosition = FVector2D(MyInputComponent->GetAxisValue("MoveRight"), MyInputComponent->GetAxisValue("MoveForward"));
+	}*/
 }
 
 // Called to bind functionality to input
 void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	
 	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABaseCharacter::MoveForward);
 	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABaseCharacter::MoveRight);
 }
@@ -75,6 +94,7 @@ void ABaseCharacter::Die()
 
 void ABaseCharacter::MoveForward(float AxisValue)
 {
+	//float MouseX = GetMouseSensitivityX();
 	// Find out which way is forward
     const FRotator Rotation = Controller->GetControlRotation();
     const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -86,6 +106,7 @@ void ABaseCharacter::MoveForward(float AxisValue)
 
 void ABaseCharacter::MoveRight(float AxisValue)
 {
+	//float MouseY = GetMouseSensitivityY();
 	// Find out which way is right
     const FRotator Rotation = Controller->GetControlRotation();
     const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -100,10 +121,12 @@ float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 	class AController* EventInstigator, AActor* DamageCauser)
 {
 	float DamageToApply = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
-	
+	// UE_LOG(LogTemp, Error, TEXT("Damage in parameter: %f"), DamageAmount);
+	// UE_LOG(LogTemp, Error, TEXT("Damage Before Correcttion: %f"), DamageToApply);
 	DamageToApply = FMath::Min(Health, DamageToApply);
+	// UE_LOG(LogTemp, Error, TEXT("Damage Get: %f"), DamageToApply);
 	Health -= DamageToApply;
-	UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
+	// UE_LOG(LogTemp, Warning, TEXT("Health: %f"), Health);
 
 	if (IsDead())
 	{
@@ -113,6 +136,12 @@ float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& 
 
 	return DamageToApply;
 }
+
+/*float ABaseCharacter::CalculateMouseSpeed()
+{
+	FVector2D MouseDelta = CurrentMousePosition - PreviousMousePosition;
+    return SpeedMultiplier * MouseDelta.Size();
+}*/
 
 /*void ABaseCharacter::DamageTaken(AActor* DamagedActor, float Damage, const UDamageType* DamageType, 
 AController* MyOwnInstigator, AActor* DamageCauser)

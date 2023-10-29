@@ -6,12 +6,18 @@
 #include "PlayerCharacter.h"
 #include "Enemy.h"
 #include "Math/Vector.h"
+#include "Blueprint/UserWidget.h"
 
 
 void AHorrorAIController::BeginPlay()
 {
     Super::BeginPlay();
 
+    /*HUD = CreateWidget(GetWorld(), HUDClass);
+    if (HUD != nullptr)
+    {
+        HUD->AddToViewport();
+    }*/
 }
 
 void AHorrorAIController::Tick(float DeltaSeconds)
@@ -60,5 +66,5 @@ bool AHorrorAIController::InAttackRange()
     FVector PlayerLocation = PlayerPawn->GetActorLocation();
     float DistanceToPlayer = FVector::Distance(PlayerLocation, EnemyLocation);
 
-    return DistanceToPlayer <= (AcceptanceRadius + 100);
+    return DistanceToPlayer <= EnemyPawn->GetAttackRange();
 }

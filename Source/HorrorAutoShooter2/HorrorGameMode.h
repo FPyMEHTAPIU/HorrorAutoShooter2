@@ -17,6 +17,14 @@ class HORRORAUTOSHOOTER2_API AHorrorGameMode : public AGameModeBase
 public:
 	virtual void PawnKilled(APawn* PawnKilled);
 
+	UFUNCTION(BlueprintCallable)
+	void SetEnemyKilledScore();
+
+	UFUNCTION(BlueprintPure)
+	float GetEnemyKilledScore();
+
 private:
 	void EndGame(bool bIsPlayerWinner);
+
+	float EnemyKilledScore = 0.f;
 };

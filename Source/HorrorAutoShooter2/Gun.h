@@ -17,6 +17,9 @@ public:
 
 	void PullTrigger();
 
+	UFUNCTION(BlueprintCallable)
+	void SetFireRate(float FireRateDecreasePercent);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -43,8 +46,10 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* MuzzleFlash;
+	// UPROPERTY(EditAnywhere)
+	// UParticleSystem* EmitterEffect;
 	UPROPERTY(EditAnywhere)
-	UParticleSystem* EmitterEffect;
+	USoundBase* ShootSound;
 
 	// Create a class for Projectile
 	UPROPERTY(EditDefaultsOnly)
