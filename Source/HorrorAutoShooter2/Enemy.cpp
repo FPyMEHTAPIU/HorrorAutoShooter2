@@ -82,7 +82,10 @@ void AEnemy::OnOverlapBegin(class UPrimitiveComponent* Comp, class AActor* Other
 
         UClass* DamageTypeClass = UDamageType::StaticClass();
         
-        AttackDamage = FMath::Min(PlayerChar->GetHealth(), AttackDamage);
+        if (PlayerChar != nullptr)
+        {
+            AttackDamage = FMath::Min(PlayerChar->GetHealth(), AttackDamage);
+        }
 
         // Here we prevent the self-damage, frendly-damage, check the hit event and damage delay
         if (OtherActor && OtherActor != this && !OtherActor->IsA(AEnemy::StaticClass()) && bHit && bDamageDeal)

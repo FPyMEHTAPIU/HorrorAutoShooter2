@@ -25,7 +25,11 @@ void AHorrorController::Tick(float DeltaTime)
     FHitResult Hit;
     GetHitResultUnderCursor(ECC_Visibility, true, Hit);
     
-    UE_LOG(LogTemp, Warning, TEXT("Clicked: %f"), PlayerPawn->GetbLMBHit());
+    if(PlayerPawn != nullptr)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Clicked: %f"), PlayerPawn->GetbLMBHit());
+    }
+    
 
     if (PlayerPawn != nullptr && PlayerPawn->GetbLMBHit())
     {
