@@ -50,4 +50,7 @@ private:
 	UParticleSystem* HitEffect;
 	UPROPERTY(EditAnywhere)
 	USoundBase* HitSound;
+
+	// UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	// class UWidgetComponent* DamageWidget;
 };

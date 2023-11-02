@@ -6,6 +6,7 @@
 #include "Components/CapsuleComponent.h"
 #include "Bonus.h"
 #include "GameFramework/PlayerInput.h"
+#include "GameFramework/CharacterMovementComponent.h"
 //#include "HealthComponent.h"
 
 // Sets default values
@@ -41,12 +42,22 @@ float ABaseCharacter::GetMaxHealth() const
 void ABaseCharacter::SetHealth(float HealValue)
 {
 	Health += HealValue;
+	if (Health <= MaxHealth) return;
+	else 
+	{
+		Health = MaxHealth;
+	}
 }
 
 // void ABaseCharacter::SetHealth(float GetDamage)
 // {
 // 	Healh -= Damage;
 // }
+
+bool ABaseCharacter::GetbLMBHit() const
+{
+	return bLMBHit;
+}
 
 // Called when the game starts or when spawned
 void ABaseCharacter::BeginPlay()
@@ -76,8 +87,33 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 	
-	PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABaseCharacter::MoveForward);
-	PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABaseCharacter::MoveRight);
+	// PlayerInputComponent->BindAxis(TEXT("MoveForward"), this, &ABaseCharacter::MoveForward);
+	// PlayerInputComponent->BindAxis(TEXT("MoveRight"), this, &ABaseCharacter::MoveRight);
+	PlayerInputComponent->BindAction(TEXT("Moving"), EInputEvent::IE_Pressed, this, &ABaseCharacter::Moving);
+	PlayerInputComponent->BindAction(TEXT("Moving"), EInputEvent::IE_Released, this, &ABaseCharacter::Idle);
+	PlayerInputComponent->BindAction(TEXT("StopMovement"), EInputEvent::IE_Pressed, this, &ABaseCharacter::StopMovement);
+	PlayerInputComponent->BindAction(TEXT("StopMovement"), EInputEvent::IE_Released, this, &ABaseCharacter::ReturnMovement);
+}
+
+void ABaseCharacter::StopMovement()
+{
+	MaxSpeed = GetCharacterMovement()->MaxWalkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = 0.f;
+}
+
+void ABaseCharacter::ReturnMovement()
+{
+	GetCharacterMovement()->MaxWalkSpeed = MaxSpeed;
+}
+
+void ABaseCharacter::Moving()
+{
+	bLMBHit = true;
+}
+
+void ABaseCharacter::Idle()
+{
+	bLMBHit = false;
 }
 
 void ABaseCharacter::Die()
@@ -89,10 +125,9 @@ void ABaseCharacter::Die()
 	/*ABaseCharacter* BaseCharPawn = Cast<ABaseCharacter>(GetOwner());
 	TSubclassOf<ABonus> BonusObject = ABonus::StaticClass();
     GetWorld()->SpawnActor<ABonus>(BonusObject, BaseCharPawn->GetActorLocation(), BaseCharPawn->GetActorRotation());*/
-		
 }
 
-void ABaseCharacter::MoveForward(float AxisValue)
+/*void ABaseCharacter::MoveForward(float AxisValue)
 {
 	//float MouseX = GetMouseSensitivityX();
 	// Find out which way is forward
@@ -115,7 +150,7 @@ void ABaseCharacter::MoveRight(float AxisValue)
 	// Add movement in that direction
     AddMovementInput(Direction, AxisValue);
 	//AddMovementInput(GetActorRightVector() * AxisValue * RotationRate * GetWorld()->GetDeltaSeconds() * MovementSpeed);
-}
+}*/
 
 float ABaseCharacter::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, 
 	class AController* EventInstigator, AActor* DamageCauser)

@@ -29,7 +29,7 @@ APlayerCharacter::APlayerCharacter()
     GetCharacterMovement()->bIgnoreBaseRotation = true;*/
 
     // Set the default Player walkspeed
-    GetCharacterMovement()->MaxWalkSpeed = 400.f;
+    GetCharacterMovement()->MaxWalkSpeed = MaxSpeed;
 }
 
 void APlayerCharacter::Tick(float DeltaTime)

@@ -46,6 +46,8 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	int32 Level = 1;
 
+	float MaxSpeed = 400.f;
+
 	template <class T>
 	T TGrabBonus(T Bonus);
 

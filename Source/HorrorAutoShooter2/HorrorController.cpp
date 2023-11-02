@@ -4,15 +4,32 @@
 #include "HorrorController.h"
 #include "TimerManager.h"
 #include "Blueprint/UserWidget.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "PlayerCharacter.h"
 
 
 void AHorrorController::BeginPlay()
 {
     Super::BeginPlay();
 
-    HUD = CreateWidget(this, HUDClass);
-    if (HUD != nullptr)
+    // HUD = CreateWidget(this, HUDClass);
+    // if (HUD != nullptr)
+    // {
+    //     HUD->AddToViewport();
+    // }
+}
+
+void AHorrorController::Tick(float DeltaTime)
+{
+    APlayerCharacter* PlayerPawn = Cast<APlayerCharacter>(GetPawn());
+    FHitResult Hit;
+    GetHitResultUnderCursor(ECC_Visibility, true, Hit);
+    
+    UE_LOG(LogTemp, Warning, TEXT("Clicked: %f"), PlayerPawn->GetbLMBHit());
+
+    if (PlayerPawn != nullptr && PlayerPawn->GetbLMBHit())
     {
-        HUD->AddToViewport();
+        FVector Direction = UKismetMathLibrary::GetDirectionUnitVector(PlayerPawn->GetActorLocation(), Hit.Location);
+        PlayerPawn->AddMovementInput(Direction);
     }
 }

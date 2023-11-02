@@ -7,6 +7,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/DamageType.h"
 #include "HealthComponent.h"
+#include "Components/WidgetComponent.h"
 
 // Sets default values
 AProjectile::AProjectile()
@@ -16,6 +17,9 @@ AProjectile::AProjectile()
 
 	ProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Projectile Mesh"));
 	RootComponent = ProjectileMesh;
+
+	// DamageWidget = CreateDefaultSubobject<UWidgetComponent>(TEXT("Damage Widget"));
+    // DamageWidget->SetupAttachment(RootComponent);
 
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("Projectile Movement Component"));
 	ProjectileMovement->MaxSpeed = 3000.f;
@@ -78,7 +82,7 @@ void AProjectile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimi
 		// Here we Apply the Damage to the OtherActor
 		// UE_LOG(LogTemp, Error, TEXT("Damage Deal: %f"), Damage);
 		UGameplayStatics::ApplyDamage(OtherActor, Damage, MyOwnInstigator, this, DamageTypeClass);
-
+		// DamageWidget->CreateWidget();
 		// Add the Particles, Sound and Camera Shake effects
 	}
 	Destroy();

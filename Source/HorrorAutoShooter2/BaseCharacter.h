@@ -31,6 +31,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	float RotationRate = 50.f;
 
+	bool GetbLMBHit() const;
+
+	// void SetbLMBHit(bool bClicked);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -50,7 +54,13 @@ private:
 	float MaxHealth = 100.f;
 	float Health = 10.f;
 
-	
+	void StopMovement();
+	void ReturnMovement();
+
+	void Moving();
+	void Idle();
+
+	float MaxSpeed = 0;
 	
 	void MoveForward(float AxisValue);
 	void MoveRight(float AxisValue);
@@ -71,4 +81,6 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float SpeedMultiplier = 5.f;
+
+	bool bLMBHit = false;
 };
