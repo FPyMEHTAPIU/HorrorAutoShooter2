@@ -25,6 +25,9 @@ public:
 	UFUNCTION(BlueprintPure)
 	float GetMaxHealth() const;
 
+	UFUNCTION(BlueprintPure)
+	float GetMaxSpeed() const;
+
 	UFUNCTION(BlueprintCallable)
 	void SetHealth(float HealValue);
 
@@ -32,6 +35,8 @@ public:
 	float RotationRate = 50.f;
 
 	bool GetbLMBHit() const;
+
+	void SetMovementSpeed(float NewSpeed);
 
 	// void SetbLMBHit(bool bClicked);
 

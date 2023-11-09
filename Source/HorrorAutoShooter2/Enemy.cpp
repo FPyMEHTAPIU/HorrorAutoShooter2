@@ -22,10 +22,11 @@ AEnemy::AEnemy()
         AttackCollision->AttachToComponent(GetMesh(), FAttachmentTransformRules::KeepRelativeTransform, TEXT("MeleeSocket"));
     }
 
-    
-
     HealthBar = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBar"));
     HealthBar->SetupAttachment(RootComponent);
+
+    SetMovementSpeed(125.f);
+    
 }
 
 void AEnemy::Tick(float DeltaTime)

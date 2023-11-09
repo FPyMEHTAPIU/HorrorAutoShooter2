@@ -39,6 +39,11 @@ float ABaseCharacter::GetMaxHealth() const
 	return MaxHealth;
 }
 
+float ABaseCharacter::GetMaxSpeed() const
+{
+	return MaxSpeed;
+}
+
 void ABaseCharacter::SetHealth(float HealValue)
 {
 	Health += HealValue;
@@ -57,6 +62,11 @@ void ABaseCharacter::SetHealth(float HealValue)
 bool ABaseCharacter::GetbLMBHit() const
 {
 	return bLMBHit;
+}
+
+void ABaseCharacter::SetMovementSpeed(float NewSpeed)
+{
+	MovementSpeed = NewSpeed;
 }
 
 // Called when the game starts or when spawned
