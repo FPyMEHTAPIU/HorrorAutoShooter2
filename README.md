@@ -1,3 +1,3 @@
-# HorrorAutoShooter2
+This is a game with an auto-shooter mechanic where you just need to move, aim, and survive.
 
-This project hasn't finished yet!
+Here's the link for playable version: https://isotopic.io/game/?game=Zombie_Strike
